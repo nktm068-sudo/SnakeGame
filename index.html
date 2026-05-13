@@ -160,10 +160,10 @@
             .nav-btn { padding: 8px 16px; font-size: 14px; }
             
             /* ИСПРАВЛЕНИЕ: Увеличили отступ сверху до 310px, чтобы заголовок не скрывался под шапкой */
-            #recipes-container { 
-                margin-top: 310px; 
+                       #recipes-container { 
                 gap: 15px; 
                 width: 95%; 
+            
             }
             
             /* ИСПРАВЛЕНИЕ: Жестко уменьшаем размер самого текста заголовка на смартфонах */
@@ -221,7 +221,7 @@
             }
         }
 
-        async function showCategory(category, buttonElement) {
+                async function showCategory(category, buttonElement) {
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             if(buttonElement) buttonElement.classList.add('active');
 
@@ -244,6 +244,10 @@
                 `;
                 container.appendChild(card);
             });
+
+            // ИСПРАВЛЕНИЕ: Перенесли авто-расчет наружу цикла в самый конец функции
+            const headerHeight = document.querySelector('.fixed-top').offsetHeight;
+            container.style.marginTop = (headerHeight + 20) + "px";
         }
 
         window.onload = () => {
