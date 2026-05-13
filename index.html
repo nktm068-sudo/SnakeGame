@@ -150,51 +150,33 @@
             color: #f1f2f6;
             white-space: pre-line;
         }
-        /* Адаптация для мобильных устройств (экраны меньше 768px) */
-@media (max-width: 768px) {
-    header {
-        padding: 12px 0;
-    }
-    header h1 {
-        font-size: 26px; /* Уменьшаем огромный заголовок */
-    }
-    .fixed-header, .fixed-top {
-        padding-bottom: 10px;
-    }
-    #search-input {
-        font-size: 14px;
-        padding: 10px 15px; /* Удобный размер для тача */
-    }
-    #navigation {
-        margin-top: 10px;
-        gap: 8px; /* Сближаем кнопки категорий */
-    }
-    .nav-btn {
-        padding: 8px 16px;
-        font-size: 14px; /* Чтобы кнопки аккуратно ложились в сетку */
-    }
-    
-    /* Исправляем отступ, так как шапка на смартфонах стала компактнее */
-    #recipes-container {
-        margin-top: 190px; 
-        gap: 15px;
-        width: 95%; /* Расширяем текстовое поле на телефонах */
-    }
-    .recipe-card {
-        padding: 18px;
-        border-left-width: 5px; /* Чуть тоньше декоративная линия */
-    }
-    .recipe-card h2 {
-        font-size: 20px;
-    }
-    .ingredients {
-        font-size: 14px;
-        padding: 10px;
-    }
-    .steps {
-        font-size: 15px;
-    }
-}
+        /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
+        @media (max-width: 768px) {
+            header { padding: 12px 0; }
+            header h1 { font-size: 26px; }
+            .fixed-top { padding-bottom: 10px; }
+            #search-input { font-size: 14px; padding: 10px 15px; }
+            #navigation { margin-top: 10px; gap: 8px; }
+            .nav-btn { padding: 8px 16px; font-size: 14px; }
+            
+            /* ИСПРАВЛЕНИЕ: Увеличили отступ сверху до 310px, чтобы заголовок не скрывался под шапкой */
+            #recipes-container { 
+                margin-top: 310px; 
+                gap: 15px; 
+                width: 95%; 
+            }
+            
+            /* ИСПРАВЛЕНИЕ: Жестко уменьшаем размер самого текста заголовка на смартфонах */
+            .recipe-card h2 { 
+                font-size: 22px; 
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+            }
+            
+            .recipe-card { padding: 18px; border-left-width: 5px; }
+            .ingredients { font-size: 14px; padding: 10px; }
+            .steps { font-size: 15px; }
+        }
 
     </style>
 </head>
