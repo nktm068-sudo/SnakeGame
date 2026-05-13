@@ -220,6 +220,92 @@
             const firstBtn = document.querySelector('.nav-btn');
             showCategory('soups', firstBtn);
         };
+                // Алгоритм поиска с допущением опечаток (расстояние Левенштейна)
+        function levDistance(s1, s2) {
+            s1 = s1.toLowerCase(); s2 = s2.toLowerCase();
+            let costs = new Array();
+            for (let i = 0; i <= s1.length; i++) {
+                let lastValue = i;
+                for (let j = 0; j <= s2.length; j++) {
+                    if (i == 0) costs[j] = j;
+                    else {
+                        if (j > 0) {
+                            let newValue = costs[j - 1];
+                            if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                                newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                            costs[j - 1] = lastValue;
+                            lastValue = newValue;
+                        }
+                    }
+                }
+                if (i > 0) costs[s2.length] = lastValue;
+            }
+            return costs[s2.length];
+        }
+
+        // Функция проверки схожести слов (разрешаем 1-2 опечатки в зависимости от длины слова)
+        function isMatch(queryWord, targetText) {
+            if (targetText.toLowerCase().includes(queryWord.toLowerCase())) return true;
+            const targetWords = targetText.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(/\s+/);
+            
+            for (let word of targetWords) {
+                if (word.length < 4) continue;
+                let maxErrors = word.length > 6 ? 2 : 1;
+                if (levDistance(queryWord, word) <= maxErrors) return true;
+            }
+            return false;
+        }
+
+        // Обработчик ввода в поисковую строку
+        async function handleSearch(query) {
+            const container = document.getElementById("recipes-container");
+            if (!query.trim()) {
+                // Если поиск пустой, возвращаем активную категорию
+                const activeBtn = document.querySelector('.nav-btn.active');
+                const categories = ['soups', 'potatoes', 'pizzas', 'burgers', 'desserts'];
+                const index = Array.from(document.querySelectorAll('.nav-btn')).indexOf(activeBtn);
+                showCategory(categories[index], activeBtn);
+                return;
+            }
+
+            const data = await loadData();
+            if (!data) return;
+
+            // Снимаем подсветку с кнопок категорий при глобальном поиске
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            container.innerHTML = "";
+
+            const queryWords = query.trim().split(/\s+/);
+            let foundAny = false;
+
+            // Ищем по всем категориям сразу
+            for (let category in data) {
+                data[category].forEach(recipe => {
+                    // Проверяем, подходят ли все слова из запроса к имени или ингредиентам
+                    let matchAllWords = queryWords.every(qWord => 
+                        isMatch(qWord, recipe.name) || isMatch(qWord, recipe.ingredients)
+                    );
+
+                    if (matchAllWords) {
+                        foundAny = true;
+                        const card = document.createElement("div");
+                        card.className = "recipe-card";
+                        card.innerHTML = `
+                            <span style="background-color: var(--color-primary); color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 10px; text-transform: uppercase;">${category}</span>
+                            <h2 style="margin-top: 10px;">${recipe.name}</h2>
+                            <div class="ingredients"><strong>Что понадобится:</strong> ${recipe.ingredients}</div>
+                            <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${recipe.steps}</div>
+                        `;
+                        container.appendChild(card);
+                    }
+                });
+            }
+
+            if (!foundAny) {
+                container.innerHTML = "<h3 style='text-align: center; color: var(--color-text-muted);'>ИИ ничего не нашёл. Попробуйте изменить запрос.</h3>";
+            }
+        }
+
     </script>
 </body>
 </html>
