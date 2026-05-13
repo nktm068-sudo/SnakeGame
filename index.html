@@ -153,10 +153,16 @@
 <body>
 
     <!-- Шапка и навигация зафиксированы здесь -->
+        <!-- Общий фиксированный блок для всей шапки сайта -->
     <div class="fixed-top">
         <header>
             <h1>🍕 eda.vkusno</h1>
         </header>
+
+        <!-- Поле умного поиска -->
+        <div style="margin-top: 15px; width: 90%; max-width: 500px; position: relative;">
+            <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="🔍 Поиск рецептов или ингредиентов (с защитой от опечаток)..." style="width: 100%; padding: 12px 20px; border-radius: 25px; border: 2px solid var(--bg-card); background-color: var(--bg-dark); color: var(--color-text-main); font-size: 16px; outline: none; box-sizing: border-box; transition: border-color 0.2s;">
+        </div>
 
         <div id="navigation">
             <button class="nav-btn active" onclick="showCategory('soups', this)">🍲 Супы</button>
@@ -166,6 +172,7 @@
             <button class="nav-btn" onclick="showCategory('desserts', this)">🍦 Десерты</button>
         </div>
     </div>
+
 
     <div id="recipes-container"></div>
 
