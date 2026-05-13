@@ -27,15 +27,25 @@
             min-height: 100vh;
         }
 
+        /* ЗАКРЕПЛЕНИЕ: Общая фиксированная шапка сайта */
+        .fixed-top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-main); /* Не дает рецептам просвечивать */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
         header {
             background-color: var(--color-primary);
             width: 100%;
             text-align: center;
             padding: 30px 0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 100;
         }
 
         header h1 {
@@ -46,7 +56,7 @@
         }
 
         #navigation {
-            margin: 35px 0;
+            margin: 25px 0; /* Чуть уменьшил, чтобы шапка не была огромной */
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
@@ -79,12 +89,14 @@
             border-color: rgba(255, 255, 255, 0.3);
         }
 
+        /* ЗАКРЕПЛЕНИЕ: Отступ сверху под высоту шапки, чтобы первый рецепт не прятался */
         #recipes-container {
             width: 90%;
             max-width: 900px;
             display: flex;
             flex-direction: column;
             gap: 30px;
+            margin-top: 230px; 
             margin-bottom: 60px;
         }
 
@@ -134,46 +146,28 @@
             line-height: 1.8;
             font-size: 17px;
             color: #f1f2f6;
-            white-space: pre-line; /* Чтобы переносы строк из JSON отображались красиво */
-        }
-
-        .steps strong {
-            color: var(--color-primary);
-            font-size: 19px;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        footer {
-            margin-top: auto;
-            background-color: var(--bg-dark);
-            width: 100%;
-            text-align: center;
-            padding: 20px 0;
-            color: var(--color-text-muted);
-            font-size: 14px;
+            white-space: pre-line;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>🍕 eda.vkusno</h1>
-    </header>
+    <!-- Шапка и навигация зафиксированы здесь -->
+    <div class="fixed-top">
+        <header>
+            <h1>🍕 eda.vkusno</h1>
+        </header>
 
-    <div id="navigation">
-        <button class="nav-btn active" onclick="showCategory('soups', this)">🍲 Супы</button>
-        <button class="nav-btn" onclick="showCategory('potatoes', this)">🥔 Картошка</button>
-        <button class="nav-btn" onclick="showCategory('pizzas', this)">🍕 Пицца</button>
-        <button class="nav-btn" onclick="showCategory('burgers', this)">🍔 Бургеры</button>
-        <button class="nav-btn" onclick="showCategory('desserts', this)">🍦 Десерты</button>
+        <div id="navigation">
+            <button class="nav-btn active" onclick="showCategory('soups', this)">🍲 Супы</button>
+            <button class="nav-btn" onclick="showCategory('potatoes', this)">🥔 Картошка</button>
+            <button class="nav-btn" onclick="showCategory('pizzas', this)">🍕 Пицца</button>
+            <button class="nav-btn" onclick="showCategory('burgers', this)">🍔 Бургеры</button>
+            <button class="nav-btn" onclick="showCategory('desserts', this)">🍦 Десерты</button>
+        </div>
     </div>
 
     <div id="recipes-container"></div>
-
-    <footer>
-        &copy; 2026 eda.vkusno — Шеф-повар ИИ. Все права защищены.
-    </footer>
 
     <script>
         let cachedData = null;
@@ -181,7 +175,6 @@
         async function loadData() {
             if (cachedData) return cachedData;
             try {
-                // Загружаем базу из отдельного внешнего файла
                 const response = await fetch('recipes.json');
                 cachedData = await response.json();
                 return cachedData;
