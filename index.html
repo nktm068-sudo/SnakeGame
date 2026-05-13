@@ -45,20 +45,21 @@
             background-color: var(--color-primary);
             width: 100%;
             text-align: center;
-            padding: 30px 0;
+            padding: 10px 0; /* Уменьшили отступ с 20 до 10 */
         }
 
         header h1 {
             margin: 0;
-            font-size: 42px;
+            font-size: 28px; /* Уменьшили шрифт с 36 до 28 */
             font-weight: 900;
             letter-spacing: 2px;
+            color: #ffffff;
         }
 
         #navigation {
-            margin: 25px 0; /* Чуть уменьшил, чтобы шапка не была огромной */
+            margin-top: 10px; /* Уменьшили с 20 до 10 */
             display: flex;
-            gap: 15px;
+            gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
             width: 90%;
@@ -69,15 +70,14 @@
             background-color: var(--bg-card);
             color: var(--color-text-main);
             border: 2px solid transparent;
-            padding: 14px 28px;
-            font-size: 18px;
+            padding: 8px 18px; /* Уменьшили паддинги, кнопки стали компактнее */
+            font-size: 15px; /* Чуть меньше шрифт */
             font-weight: bold;
             border-radius: 30px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
-
         .nav-btn:hover {
             background-color: var(--color-primary);
             transform: translateY(-3px);
@@ -222,7 +222,11 @@
             }
         }
 
-                async function showCategory(category, buttonElement) {
+                   async function showCategory(category, buttonElement) {
+            // Возвращаем шапку в фиксированное положение
+            const headerBlock = document.querySelector('.fixed-top');
+            headerBlock.style.position = "fixed";
+
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             if(buttonElement) buttonElement.classList.add('active');
 
@@ -246,12 +250,16 @@
                 container.appendChild(card);
             });
 
-            // ИСПРАВЛЕНИЕ: Перенесли авто-расчет наружу цикла в самый конец функции
-            const headerHeight = document.querySelector('.fixed-top').offsetHeight;
+            // Авто-расчет отступа
+            const headerHeight = headerBlock.offsetHeight;
             container.style.marginTop = (headerHeight + 20) + "px";
         }
-                function showThanks(buttonElement) {
-            // Снимаем подсветку со всех кнопок и подсвечиваем эту
+
+        function showThanks(buttonElement) {
+            // Переключаем шапку в абсолютное положение, чтобы она уезжала при скролле
+            const headerBlock = document.querySelector('.fixed-top');
+            headerBlock.style.position = "absolute";
+
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             if(buttonElement) buttonElement.classList.add('active');
 
@@ -265,15 +273,16 @@
                         <br><br>
                         Я хочу сказать огромное <strong>спасибо компании Google за создание искусственного интеллекта Gemini</strong>! 
                         Вместе с нейросетью Gemini мы с нуля написали весь этот код, исправили кучу ошибок, настроили умный поиск с защитой от опечаток и запустили сайт в интернет на GitHub Pages. 
-                           С ИИ создавать программы — одно удовольствие. Спасибо за крутую утилиту-выручалочку!
+                        <br><br>
+                        С ИИ создавать программы — одно удовольствие. Спасибо за крутую утилиту-выручалочку! 
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
 
-        // Корректируем отступ сверху под высоту шапки
-        const headerHeight = document.querySelector('.fixed-top').offsetHeight;
-        container.style.marginTop = (headerHeight + 20) + "px";
-    }
+            // Выставляем отступ под высоту абсолютной шапки
+            const headerHeight = headerBlock.offsetHeight;
+            container.style.marginTop = (headerHeight + 20) + "px";
+        }
 
     window.onload = () => {
         const firstBtn = document.querySelector('.nav-btn');
