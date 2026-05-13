@@ -59,24 +59,26 @@
         }
 
         /* СТИЛИ ДЛЯ ИНПУТА ПОИСКА С НЕОНОВЫМ СВЕЧЕНИЕМ И КРАСИВОЙ ЛУПОЙ */
-        #search-input {
-            width: 100%;
-            padding: 12px 20px 12px 45px; /* Большой отступ слева под лупу */
-            border-radius: 25px;
-            border: 2px solid var(--bg-card);
-            background-color: var(--bg-dark);
-            color: var(--color-text-main);
-            font-size: 16px;
-            outline: none;
-            box-sizing: border-box;
-            transition: all 0.3s ease; /* Плавная анимация свечения */
-            text-align: left; /* Текст пишется ровно слева */
-            
-            /* Код векторной лупы */
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'w3.org\' width=\'16\' height=\'16\' fill=\'%23a4b0be\' class=\'bi bi-search\' viewBox=\'0 0 16 16\'><path d=\'M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z\'/></svg>');
-            background-repeat: no-repeat;
-            background-position: 18px center; /* Закрепляем лупу слева */
-        }
+       #search-input {
+    width: 100%;
+    padding: 12px 20px 12px 45px; /* Большой отступ слева под лупу */
+    border-radius: 25px;
+    border: 2px solid var(--bg-card);
+    background-color: var(--bg-dark);
+    color: var(--color-text-main);
+    font-size: 16px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease; /* Плавная анимация свечения */
+    text-align: left; /* Текст пишется ровно слева */
+    
+    /* Подключение твоей загруженной картинки */
+    background-image: url('search.png');
+    background-repeat: no-repeat;
+    background-position: 16px center; /* Сдвиг лупы слева */
+    background-size: 18px 18px;       /* Ограничение размера картинки */
+}
+
 
         /* Эффект при клике на строку поиска */
         #search-input:focus {
