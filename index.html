@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>eda.vkusno — Кулинария от ИИ</title>
+    <style>
+        body {
+            background-color: #1a1c23;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            background-color: #ff4757;
+            width: 100%;
+            text-align: center;
+            padding: 25px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+            color: #ffffff;
+            font-weight: 800;
+        }
+        #navigation {
+            margin: 30px 0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .nav-btn {
+            background-color: #2f3542;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover {
+            background-color: #ff4757;
+            transform: translateY(-2px);
+        }
+        .nav-btn.active {
+            background-color: #ff4757;
+        }
+        #recipes-container {
+            width: 90%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        .recipe-card {
+            background-color: #2f3542;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-left: 6px solid #ff4757;
+        }
+        .recipe-card h2 {
+            margin-top: 0;
+            color: #ff4757;
+            font-size: 24px;
+        }
+        .ingredients {
+            background-color: #1a1c23;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-style: italic;
+            margin: 15px 0;
+            border-left: 3px solid #ffca28;
+        }
+        .steps {
+            line-height: 1.7;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🍕 eda.vkusno</h1>
+    </header>
+
+    <div id="navigation">
+        <button class="nav-btn active" onclick="showCategory('soups', this)">🍲 Супы</button>
+        <button class="nav-btn" onclick="showCategory('potatoes', this)">🥔 Картошка</button>
+        <button class="nav-btn" onclick="showCategory('pizzas', this)">🍕 Пицца</button>
+    </div>
+
+    <div id="recipes-container">
+        <!-- Рецепты будут выводиться здесь -->
+    </div>
+
+    <script>
+        // БАЗА ДАННЫХ РЕЦЕПТОВ ПРЯМО НА КЛИЕНТЕ
+        const DATA = {
+            soups: [
+                {
+                    name: "Сырный крем-суп с гренками",
+                    ingredients: "Плавленый сыр (в брусочках) — 2 шт, картофель — 3 шт, морковь — 1 шт, лук — 1 шт, гренки, зелень, соль.",
+                    steps: "1. Нарежьте картофель кубиками и поставьте вариться в небольшой кастрюле.<br>2. Обжарьте мелко нарезанный лук и тертую морковь на сковороде до мягкости.<br>3. Когда картофель сварится, добавьте зажарку и натрите на терке плавленый сыр прямо в кастрюлю.<br>4. Тщательно помешивайте на медленном огне, пока сыр полностью не растворится. Взбейте блендером и подавайте с сухариками."
+                }
+            ],
+            potatoes: [
+                {
+                    name: "Золотистая картошка по-деревенски",
+                    ingredients: "Картофель — 5 шт, чеснок — 3 зубчика, паприка сладкая — 1 ч.л., куркума — 0.5 ч.л., растительное масло — 3 ст.л., соль.",
+                    steps: "1. Тщательно вымойте картофель и нарежьте его крупными дольками прямо с кожурой.<br>2. В глубокой миске смешайте растительное масло, выдавленный чеснок, паприку, куркуму и соль.<br>3. Выложите картофель в миску и хорошо перемешайте руками, чтобы каждая долька покрылась специями.<br>4. Разложите на противень в один слой и запекайте в духовке при 200°C примерно 30-35 минут до хрустящей корочки."
+                }
+            ],
+            pizzas: [
+                {
+                    name: "Быстрая пицца на сковороде за 10 минут",
+                    ingredients: "Мука — 9 ст.л., сметана — 4 ст.л., майонез — 4 ст.л., яйца — 2 шт, колбаса, помидоры, твердый сыр — 150г.",
+                    steps: "1. В миске смешайте яйца, сметану, майонез и муку. Тесто получится жидким, как сметана.<br>2. Вылейте тесто на холодную сковороду, смазанную каплей масла.<br>3. Сверху аккуратно разложите начинку: кружочки колбасы, томаты и обильно засыпьте тертым сыром.<br>4. Накройте сковороду крышкой, поставьте на медленный огне и готовьте 10-12 минут, пока сыр полностью не расплавится, а низ теста не подрумянится."
+                }
+            ]
+        };
+
+        function showCategory(category, buttonElement) {
+            // Переключение активной кнопки
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+
+            const container = document.getElementById("recipes-container");
+            container.innerHTML = "";
+
+            const recipes = DATA[category];
+            
+            recipes.forEach(recipe => {
+                const card = document.createElement("div");
+                card.className = "recipe-card";
+                card.innerHTML = `
+                    <h2>${recipe.name}</h2>
+                    <div class="ingredients"><strong>Что нужно:</strong> ${recipe.ingredients}</div>
+                    <div class="steps"><strong>Как готовить:</strong><br>${recipe.steps}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Показываем супы при первой загрузке
+        window.onload = () => {
+            const firstBtn = document.querySelector('.nav-btn');
+            showCategory('soups', firstBtn);
+        };
+    </script>
+</body>
+</html>
