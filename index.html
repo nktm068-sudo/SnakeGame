@@ -200,6 +200,7 @@
             <button class="nav-btn" onclick="showCategory('pizzas', this)">🍕 Пицца</button>
             <button class="nav-btn" onclick="showCategory('burgers', this)">🍔 Бургеры</button>
             <button class="nav-btn" onclick="showCategory('desserts', this)">🍦 Десерты</button>
+            <button class="nav-btn" style="background-color: #34495e;" onclick="showThanks(this)">❤️ Благодарность</button>
         </div>
     </div>
 
@@ -249,13 +250,39 @@
             const headerHeight = document.querySelector('.fixed-top').offsetHeight;
             container.style.marginTop = (headerHeight + 20) + "px";
         }
+                function showThanks(buttonElement) {
+            // Снимаем подсветку со всех кнопок и подсвечиваем эту
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            if(buttonElement) buttonElement.classList.add('active');
 
-        window.onload = () => {
-            const firstBtn = document.querySelector('.nav-btn');
-            showCategory('soups', firstBtn);
-        };
-                // Алгоритм поиска с допущением опечаток (расстояние Левенштейна)
-        function levDistance(s1, s2) {
+            const container = document.getElementById("recipes-container");
+            container.innerHTML = `
+                <div class="recipe-card" style="border-left-color: #ffca28; animation: fadeIn 0.4s ease-out;">
+                    <h2 style="color: #ffca28;">История проекта и спасибо Google! 🚀</h2>
+                    <div class="steps">
+                        Привет! Меня зовут <strong>Никита, мне 8 лет</strong>. 
+                        Этот сайт <strong>eda.vkusno</strong> я придумал и создал сам, когда за окном в мае шёл снегопад.
+                        <br><br>
+                        Я хочу сказать огромное <strong>спасибо компании Google за создание искусственного интеллекта Gemini</strong>! 
+                        Вместе с нейросетью Gemini мы с нуля написали весь этот код, исправили кучу ошибок, настроили умный поиск с защитой от опечаток и запустили сайт в интернет на GitHub Pages. 
+                           С ИИ создавать программы — одно удовольствие. Спасибо за крутую утилиту-выручалочку!
+                </div>
+            </div>
+        `;
+
+        // Корректируем отступ сверху под высоту шапки
+        const headerHeight = document.querySelector('.fixed-top').offsetHeight;
+        container.style.marginTop = (headerHeight + 20) + "px";
+    }
+
+    window.onload = () => {
+        const firstBtn = document.querySelector('.nav-btn');
+        showCategory('soups', firstBtn);
+    };
+
+    // Алгоритм поиска с допущением опечаток (расстояние Левенштейна)
+    function levDistance(s1, s2) {
+
             s1 = s1.toLowerCase(); s2 = s2.toLowerCase();
             let costs = new Array();
             for (let i = 0; i <= s1.length; i++) {
