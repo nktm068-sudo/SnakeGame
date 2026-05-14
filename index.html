@@ -233,7 +233,7 @@
 
         <!-- Поле умного поиска -->
         <div style="margin-top: 15px; width: 90%; max-width: 500px; position: relative;">
-            <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="     Поиск..." style="width: 100%; padding: 12px 20px; border-radius: 25px; border: 2px solid var(--bg-card); background-color: var(--bg-dark); color: var(--color-text-main); font-size: 16px; outline: none; box-sizing: border-box; transition: border-color 0.2s;">
+            <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="           Поиск..." style="width: 100%; padding: 12px 20px; border-radius: 25px; border: 2px solid var(--bg-card); background-color: var(--bg-dark); color: var(--color-text-main); font-size: 16px; outline: none; box-sizing: border-box; transition: border-color 0.2s;">
         </div>
 
         <div id="navigation">
@@ -278,15 +278,6 @@
             const data = await loadData();
             if (!data) return;
 
-           // Проверяем, не гороховый ли это суп, чтобы вывести секретное предупреждение от ИИ
-let warningBlock = "";
-if (recipe.name.includes("гороховый суп")) {
-    warningBlock = `
-        <div style="background-color: #fffae6; border-left: 4px solid #ffa000; padding: 12px; margin-bottom: 15px; border-radius: 8px; font-size: 14px; color: #b78103; font-weight: bold;">
-            ⚠️ ОПАСНОСТЬ ОТ ИИ: После этого супа рекомендуется заранее найти противогазы, иначе вокруг всё станет слишком «жидко» и взрывоопасно! На улицу без страховки не выходить! 💨
-        </div>
-    `;
-}
 
 card.innerHTML = `
     <h2>${recipe.name}</h2>
