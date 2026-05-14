@@ -244,6 +244,7 @@
         </div>
 
         <div id="navigation">
+            <button class="nav-btn active" onclick="showHome(this)">🏠 Главная</button>
             <button class="nav-btn active" onclick="showCategory('soups', this)">🍲 Супы</button>
             <button class="nav-btn" onclick="showCategory('potatoes', this)">🥔 Картошка</button>
             <button class="nav-btn" onclick="showCategory('pizzas', this)">🍕 Пицца</button>
@@ -257,7 +258,7 @@
     <div id="recipes-container"></div>
 
     <script>
-        let cachedData = null;
+           let cachedData = null;
 
         async function loadData() {
             if (cachedData) return cachedData;
@@ -271,8 +272,66 @@
             }
         }
 
+        // Функция для отображения Главной страницы сайта
+        function showHome(buttonElement) {
+            const headerBlock = document.querySelector('.fixed-top');
+            headerBlock.style.position = "fixed";
+
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            if(buttonElement) buttonElement.classList.add('active');
+
+            const container = document.getElementById("recipes-container");
+            container.innerHTML = `
+                <div class="recipe-card" style="border-left-color: #2ed573; text-align: center; animation: fadeIn 0.4s ease-out;">
+                    <h2 style="border: none; padding: 0;">Добро пожаловать в eda.vkusno! 🍳</h2>
+                    <p style="font-size: 18px; color: #57606f; line-height: 1.6;">
+                        Не знаете, что приготовить сегодня? Пускай искусственный интеллект сделает выбор за вас! 
+                        Нажмите на кнопку ниже, и ИИ выберет случайное блюдо из нашей огромной кулинарной книги.
+                    </p>
+                    <br>
+                    <button onclick="getRandomRecipe()" style="background-color: #ffaf40; color: white; border: none; padding: 15px 35px; font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 20px rgba(255, 175, 64, 0.4); transition: all 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        🎲 Найти случайное блюдо!
+                    </button>
+                </div>
+            `;
+
+            const headerHeight = headerBlock.offsetHeight;
+            container.style.marginTop = (headerHeight + 20) + "px";
+        }
+
+        // Алгоритм генерации абсолютно любого случайного рецепта из всех категорий
+        async function getRandomRecipe() {
+            const container = document.getElementById("recipes-container");
+            const data = await loadData();
+            if (!data) return;
+
+            let allRecipes = [];
+            for (let category in data) {
+                data[category].forEach(recipe => {
+                    recipe.categoryName = category; 
+                    allRecipes.push(recipe);
+                });
+            }
+
+            const randomIndex = Math.floor(Math.random() * allRecipes.length);
+            const randomRecipe = allRecipes[randomIndex];
+
+            container.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <button onclick="getRandomRecipe()" style="background-color: #2ed573; color: white; border: none; padding: 10px 25px; font-size: 15px; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 12px rgba(46, 213, 115, 0.3);">
+                        🔄 Выбрать другое блюдо
+                    </button>
+                </div>
+                <div class="recipe-card" style="animation: fadeIn 0.4s ease-out;">
+                    <span style="background-color: #ffaf40; color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 10px; text-transform: uppercase;">${randomRecipe.categoryName}</span>
+                    <h2 style="margin-top: 10px;">${randomRecipe.name}</h2>
+                    <div class="ingredients"><strong>Что понадобится:</strong> ${randomRecipe.ingredients}</div>
+                    <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${randomRecipe.steps}</div>
+                </div>
+            `;
+        }
+
         async function showCategory(category, buttonElement) {
-            // Возвращаем шапку в фиксированное положение
             const headerBlock = document.querySelector('.fixed-top');
             headerBlock.style.position = "fixed";
 
@@ -299,13 +358,11 @@
                 container.appendChild(card);
             });
 
-            // Авто-расчет отступа
             const headerHeight = headerBlock.offsetHeight;
             container.style.marginTop = (headerHeight + 20) + "px";
         }
 
         function showThanks(buttonElement) {
-            // Переключаем шапку в абсолютное положение, чтобы она уезжала при скролле
             const headerBlock = document.querySelector('.fixed-top');
             headerBlock.style.position = "absolute";
 
@@ -317,28 +374,26 @@
                 <div class="recipe-card" style="border-left-color: #ffca28; animation: fadeIn 0.4s ease-out;">
                     <h2 style="color: #ffca28;">Project history and thanks to Google 🚀</h2>
                     <div class="steps">
-                        Hello! My name is<strong>Nikita, I'm 8 years old.</strong>. 
-                        I came up with and created this website, <strong>eda.vkusno,</strong> myself, while it was snowing outside in May.
+                        Hello! My name is <strong>Nikita, I'm 8 years old</strong>. 
+                        I came up with and created this website, <strong>eda.vkusno</strong>, myself, while it was snowing outside in May.
                         <br><br>
-                        I want to say a huge thank you to <strong>google for the creation of the artificial intelligence Gemini</strong>! 
+                        I want to say a huge thank you to <strong>Google for the creation of the artificial intelligence Gemini</strong>! 
                         Together with the Gemini neural network, we wrote this entire code from scratch, fixed a bunch of bugs, set up a smart search with typo protection, and launched the website online on GitHub Pages. 
                         <br><br>
-                       Creating programs with AI is a joy. Thanks for this awesome lifesaver!
+                        Creating programs with AI is a joy. Thanks for this awesome lifesaver! 
                     </div>
                 </div>
             `;
 
-            // Выставляем отступ под высоту абсолютной шапки
             const headerHeight = headerBlock.offsetHeight;
             container.style.marginTop = (headerHeight + 20) + "px";
         }
 
         window.onload = () => {
             const firstBtn = document.querySelector('.nav-btn');
-            showCategory('soups', firstBtn);
+            showHome(firstBtn);
         };
 
-        // Алгоритм поиска с допущением опечаток (расстояние Леваны)
         function levDistance(s1, s2) {
             s1 = s1.toLowerCase(); s2 = s2.toLowerCase();
             let costs = new Array();
@@ -361,7 +416,6 @@
             return costs[s2.length];
         }
 
-        // Функция проверки схожести слов (разрешаем 1-2 опечатки в зависимости от длины слова)
         function isMatch(queryWord, targetText) {
             if (targetText.toLowerCase().includes(queryWord.toLowerCase())) return true;
             const targetWords = targetText.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(/\s+/);
@@ -374,11 +428,9 @@
             return false;
         }
 
-        // Обработчик ввода в поисковую строку
         async function handleSearch(query) {
             const container = document.getElementById("recipes-container");
             if (!query.trim()) {
-                // Если поиск пустой, возвращаем активную категорию
                 const activeBtn = document.querySelector('.nav-btn.active');
                 const categories = ['soups', 'potatoes', 'pizzas', 'burgers', 'desserts'];
                 const index = Array.from(document.querySelectorAll('.nav-btn')).indexOf(activeBtn);
@@ -389,17 +441,14 @@
             const data = await loadData();
             if (!data) return;
 
-            // Снимаем подсветку с кнопок категорий при глобальном поиске
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             container.innerHTML = "";
 
             const queryWords = query.trim().split(/\s+/);
             let foundAny = false;
 
-            // Ищем по всем категориям сразу
             for (let category in data) {
                 data[category].forEach(recipe => {
-                    // Проверяем, подходят ли все слова из запроса к имени или ингредиентам
                     let matchAllWords = queryWords.every(qWord => 
                         isMatch(qWord, recipe.name) || isMatch(qWord, recipe.ingredients)
                     );
