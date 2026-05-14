@@ -281,7 +281,7 @@
 
 card.innerHTML = `
     <h2>${recipe.name}</h2>
-    ${warningBlock}
+    
     <div class="ingredients"><strong>Что понадобится:</strong> ${recipe.ingredients}</div>
     <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${recipe.steps}</div>
 `;
@@ -395,30 +395,24 @@ let matchAllWords = queryWords.every(qWord =>
 );
 
 if (matchAllWords) {
-    let warningBlock = "";
-    if (recipe.name.includes("гороховый суп")) {
 
-    warningBlock = `
-        <div style="background-color: #fffae6; border-left: 4px solid #ffa000; padding: 12px; margin-bottom: 15px; border-radius: 8px; font-size: 14px; color: #b78103; font-weight: bold;">
-            ⚠️ ОПАСНОСТЬ ОТ ИИ: После этого супа рекомендуется заранее найти противогазы, иначе вокруг всё станет слишком «жидко» и взрывоопасно! На улицу без страховки не выходить! 💨(если выйдете то зря, лучше будьте в не людных местах и возле кустов и берите с собой туалетку) 
-        </div>
-    `;
+    
 }
 
 card.className = "recipe-card";
 card.innerHTML = `
     <span style="background-color: var(--color-primary); color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 10px; text-transform: uppercase;">${category}</span>
     <h2 style="margin-top: 10px;">${recipe.name}</h2>
-    ${warningBlock}
     <div class="ingredients"><strong>Что понадобится:</strong> ${recipe.ingredients}</div>
     <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${recipe.steps}</div>
 `;
+    }
+}
 
+if (!foundAny) {
+    container.innerHTML = "<h3 style='text-align: center; color: var(--color-text-muted);'>ИИ ничего не нашёл. Попробуйте изменить запрос.</h3>";
+}
 
-            if (!foundAny) {
-                container.innerHTML = "<h3 style='text-align: center; color: var(--color-text-muted);'>ИИ ничего не нашёл. Попробуйте изменить запрос.</h3>";
-            }
-        }
 
     </script>
 </body>
