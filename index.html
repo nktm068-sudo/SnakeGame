@@ -59,19 +59,26 @@
         }
 
         /* НАСТРОЙКИ СВЕТЛОГО ИНПУТА ПОИСКА ПОД ЧЕРНУЮ ЛУПУ */
-        #search-input {
-            width: 100%;
-            padding: 12px 20px 12px 45px;
-            border-radius: 25px;
-            border: 2px solid rgba(0, 0, 0, 0.05);
-            background-color: var(--bg-dark);
-            color: var(--color-text-main);
-            font-size: 16px;
-            outline: none;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-            text-align: left;
-            
+       #search-input {
+    width: 100%;
+    padding: 12px 20px 12px 45px !important; /* Добавили отступ слева, чтобы текст не залезал на лупу */
+    border-radius: 25px;
+    border: 2px solid rgba(0, 0, 0, 0.05);
+    background-color: var(--bg-dark);
+    color: var(--color-text-main);
+    font-size: 16px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    text-align: left;
+    
+    /* Настройки картинки лупы */
+    background-image: url('github.io') !important;
+    background-repeat: no-repeat;
+    background-position: 16px center !important;
+    background-size: 18px 18px;
+}
+
             /* Ссылка на твою иконку (собери без пробелов, когда будешь вставлять) */
             background-image: url('https://nktm068-sudo.github.io/eda.vkusno/search.png');
             background-repeat: no-repeat;
@@ -201,7 +208,7 @@
             
             #search-input { 
                 font-size: 14px; 
-                padding: 10px 15px 10px 40px; 
+                padding: 10px 15px 10px 48px !important;
                 background-position: 15px center;
             }
             
@@ -233,7 +240,7 @@
 
         <!-- Поле умного поиска -->
         <div style="margin-top: 15px; width: 90%; max-width: 500px; position: relative;">
-            <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="           Поиск..." style="width: 100%; padding: 12px 20px; border-radius: 25px; border: 2px solid var(--bg-card); background-color: var(--bg-dark); color: var(--color-text-main); font-size: 16px; outline: none; box-sizing: border-box; transition: border-color 0.2s;">
+ <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Поиск...">
         </div>
 
         <div id="navigation">
