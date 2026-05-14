@@ -264,7 +264,7 @@
             }
         }
 
-                   async function showCategory(category, buttonElement) {
+        async function showCategory(category, buttonElement) {
             // Возвращаем шапку в фиксированное положение
             const headerBlock = document.querySelector('.fixed-top');
             headerBlock.style.position = "fixed";
@@ -278,14 +278,19 @@
             const data = await loadData();
             if (!data) return;
 
-
-card.innerHTML = `
-    <h2>${recipe.name}</h2>
-    
-    <div class="ingredients"><strong>Что понадобится:</strong> ${recipe.ingredients}</div>
-    <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${recipe.steps}</div>
-`;
-
+            container.innerHTML = "";
+            const recipes = data[category] || [];
+            
+            recipes.forEach(recipe => {
+                const card = document.createElement("div");
+                card.className = "recipe-card";
+                card.innerHTML = `
+                    <h2>${recipe.name}</h2>
+                    <div class="ingredients"><strong>Что понадобится:</strong> ${recipe.ingredients}</div>
+                    <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${recipe.steps}</div>
+                `;
+                container.appendChild(card);
+            });
 
             // Авто-расчет отступа
             const headerHeight = headerBlock.offsetHeight;
@@ -321,14 +326,13 @@ card.innerHTML = `
             container.style.marginTop = (headerHeight + 20) + "px";
         }
 
-    window.onload = () => {
-        const firstBtn = document.querySelector('.nav-btn');
-        showCategory('soups', firstBtn);
-    };
+        window.onload = () => {
+            const firstBtn = document.querySelector('.nav-btn');
+            showCategory('soups', firstBtn);
+        };
 
-    // Алгоритм поиска с допущением опечаток (расстояние Левенштейна)
-    function levDistance(s1, s2) {
-
+        // Алгоритм поиска с допущением опечаток (расстояние Леваны)
+        function levDistance(s1, s2) {
             s1 = s1.toLowerCase(); s2 = s2.toLowerCase();
             let costs = new Array();
             for (let i = 0; i <= s1.length; i++) {
@@ -390,29 +394,28 @@ card.innerHTML = `
                 data[category].forEach(recipe => {
                     // Проверяем, подходят ли все слова из запроса к имени или ингредиентам
                     let matchAllWords = queryWords.every(qWord => 
-let matchAllWords = queryWords.every(qWord => 
-    isMatch(qWord, recipe.name) || isMatch(qWord, recipe.ingredients)
-);
+                        isMatch(qWord, recipe.name) || isMatch(qWord, recipe.ingredients)
+                    );
 
-if (matchAllWords) {
+                    if (matchAllWords) {
+                        foundAny = true;
+                        const card = document.createElement("div");
+                        card.className = "recipe-card";
+                        card.innerHTML = `
+                            <span style="background-color: var(--color-primary); color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 10px; text-transform: uppercase;">${category}</span>
+                            <h2 style="margin-top: 10px;">${recipe.name}</h2>
+                            <div class="ingredients"><strong>Что понадобится:</strong> ${recipe.ingredients}</div>
+                            <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${recipe.steps}</div>
+                        `;
+                        container.appendChild(card);
+                    }
+                });
+            }
 
-    
-}
-
-card.className = "recipe-card";
-card.innerHTML = `
-    <span style="background-color: var(--color-primary); color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 10px; text-transform: uppercase;">${category}</span>
-    <h2 style="margin-top: 10px;">${recipe.name}</h2>
-    <div class="ingredients"><strong>Что понадобится:</strong> ${recipe.ingredients}</div>
-    <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${recipe.steps}</div>
-`;
-    }
-}
-
-if (!foundAny) {
-    container.innerHTML = "<h3 style='text-align: center; color: var(--color-text-muted);'>ИИ ничего не нашёл. Попробуйте изменить запрос.</h3>";
-}
-
+            if (!foundAny) {
+                container.innerHTML = "<h3 style='text-align: center; color: var(--color-text-muted);'>ИИ ничего не нашёл. Попробуйте изменить запрос.</h3>";
+            }
+        }
 
     </script>
 </body>
