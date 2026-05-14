@@ -239,13 +239,14 @@
         </header>
 
         <!-- Поле умного поиска -->
-        <div style="margin-top: 15px; width: 90%; max-width: 500px; position: relative;">
- <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Поиск...">
-        </div>
+      <div style="margin-top: 15px; width: 90%; max-width: 500px; position: relative;">
+          <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Поиск...">
+          <button id="clear-search" onclick="clearSearchField()" style="display: none; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 18px; color: var(--color-text-muted); cursor: pointer; padding: 0; line-height: 1;">✕</button>
+      </div>
 
         <div id="navigation">
             <button class="nav-btn active" onclick="showHome(this)">🏠 Главная</button>
-            <button class="nav-btn active" onclick="showCategory('soups', this)">🍲 Супы</button>
+            <button class="nav-btn" onclick="showCategory('soups', this)">🍲 Супы</button>
             <button class="nav-btn" onclick="showCategory('potatoes', this)">🥔 Картошка</button>
             <button class="nav-btn" onclick="showCategory('pizzas', this)">🍕 Пицца</button>
             <button class="nav-btn" onclick="showCategory('burgers', this)">🍔 Бургеры</button>
@@ -430,6 +431,8 @@
         }
 
         async function handleSearch(query) {
+                const clearBtn = document.getElementById("clear-search");
+    if (clearBtn) clearBtn.style.display = query.trim() ? "block" : "none";
             const container = document.getElementById("recipes-container");
             if (!query.trim()) {
                 const activeBtn = document.querySelector('.nav-btn.active');
@@ -473,6 +476,22 @@
                 container.innerHTML = "<h3 style='text-align: center; color: var(--color-text-muted);'>ИИ ничего не нашёл. Попробуйте изменить запрос.</h3>";
             }
         }
+function clearSearchField() {
+    const input = document.getElementById("search-input");
+    const clearBtn = document.getElementById("clear-search");
+    
+    if (input) input.value = "";
+    if (clearBtn) clearBtn.style.display = "none";
+    
+    const activeBtn = document.querySelector('.nav-btn.active');
+    
+    if (activeBtn) {
+        activeBtn.click();
+    } else {
+        const firstBtn = document.querySelector('.nav-btn');
+        if (firstBtn) firstBtn.click();
+    }
+}
 
     </script>
 </body>
