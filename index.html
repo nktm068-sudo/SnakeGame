@@ -43,21 +43,20 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Легкая тень для светлой темы */
         }
 
-        header {
+           header {
             background-color: var(--color-primary);
             width: 100%;
             text-align: center;
-            padding: 10px 0;
+            padding: 6px 0; /* Уменьшили отступ */
         }
 
         header h1 {
             margin: 0;
-            font-size: 28px;
+            font-size: 22px; /* Уменьшили размер букв с 28px */
             font-weight: 900;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             color: #ffffff;
         }
-
         /* НАСТРОЙКИ СВЕТЛОГО ИНПУТА ПОИСКА ПОД ЧЕРНУЮ ЛУПУ */
        #search-input {
     width: 100%;
@@ -201,19 +200,20 @@
         }
 
         /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
+        /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
         @media (max-width: 768px) {
-            header { padding: 12px 0; }
-            header h1 { font-size: 26px; }
-            .fixed-top { padding-bottom: 10px; }
+            header { padding: 4px 0; }
+            header h1 { font-size: 18px; } /* Совсем аккуратный заголовок на смартфонах */
+            .fixed-top { padding-bottom: 6px; }
             
             #search-input { 
                 font-size: 14px; 
-                padding: 10px 15px 10px 48px !important;
-                background-position: 15px center;
+                padding: 8px 15px 8px 42px !important; /* Сделали сам инпут тоньше */
+                background-position: 12px center;
             }
             
-            #navigation { margin-top: 10px; gap: 8px; }
-            .nav-btn { padding: 8px 16px; font-size: 14px; }
+            #navigation { margin-top: 6px; gap: 6px; }
+            .nav-btn { padding: 6px 12px; font-size: 13px; } /* Кнопки стали компактнее */
             #recipes-container { gap: 15px; width: 95%; }
             
             .recipe-card h2 { 
@@ -251,8 +251,7 @@
             <button class="nav-btn" onclick="showCategory('pizzas', this)">🍕 Пицца</button>
             <button class="nav-btn" onclick="showCategory('burgers', this)">🍔 Бургеры</button>
             <button class="nav-btn" onclick="showCategory('desserts', this)">🍦 Десерты</button>
-               <button class="nav-btn" onclick="showCategory('drinks', this)">🍹 Напитки</button>
-            <button class="nav-btn" style="background-color: #34495e;" onclick="showThanks(this)">❤️ Благодарность</button>
+            <button class="nav-btn" onclick="showCategory('drinks', this)">🍹 Напитки</button>
         </div>
     </div>
 
