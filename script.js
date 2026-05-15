@@ -289,8 +289,24 @@ function clearSearchField() {
         if (firstBtn) firstBtn.click();
     }
 }
+// Функция переключения тем с сохранением выбора пользователя
+function toggleTheme() {
+    const body = document.body;
+    body.classList.toggle('dark-mode');
+    
+    // Запоминаем выбор пользователя в памяти браузера
+    if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+}
 
 window.onload = () => {
+    // Проверяем, включал ли пользователь темную тему ранее
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
     const firstBtn = document.querySelector('.nav-btn');
     showHome(firstBtn);
 };
