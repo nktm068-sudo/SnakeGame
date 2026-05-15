@@ -187,16 +187,18 @@
             recipes.forEach(recipe => {
                 const card = document.createElement("div");
                 card.className = "recipe-card";
-                card.innerHTML = `
+                  card.innerHTML = `
                     <h2>${recipe.name}</h2>
                     <div class="ingredients"><strong>Что понадобится:</strong> ${recipe.ingredients}</div>
                     <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${recipe.steps}</div>
-                `;
+                `; // <-- Вот здесь добавилась кавычка перед точкой с запятой!
                 container.appendChild(card);
+
             });
 
             const headerHeight = headerBlock.offsetHeight;
-            container.style.marginTop = (headerHeight + 20) + "px";
+            container.style.marginTop = (headerHeight + 20) + "px"
+
         }
 
         // МАТЕМАТИЧЕСКИЙ АЛГОРИТМ ЛЕВЕНШТЕЙНА ДЛЯ ПРОВЕРКИ ОПЕЧАТОК
