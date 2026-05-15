@@ -200,7 +200,6 @@
         }
 
         /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
-        /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
         @media (max-width: 768px) {
             header { padding: 4px 0; }
             header h1 { font-size: 18px; } /* Совсем аккуратный заголовок на смартфонах */
@@ -352,11 +351,12 @@
         }
 
         // Алгоритм генерации абсолютно любого случайного рецепта из всех категорий
+               // Алгоритм генерации случайного рецепта БЕЗ удаления ленты
         async function getRandomRecipe() {
-            const container = document.getElementById("recipes-container");
             const data = await loadData();
             if (!data) return;
 
+            // Собираем вообще все рецепты в один массив
             let allRecipes = [];
             for (let category in data) {
                 data[category].forEach(recipe => {
@@ -365,23 +365,46 @@
                 });
             }
 
+            // Выбираем случайный
             const randomIndex = Math.floor(Math.random() * allRecipes.length);
             const randomRecipe = allRecipes[randomIndex];
 
-            container.innerHTML = `
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <button onclick="getRandomRecipe()" style="background-color: #2ed573; color: white; border: none; padding: 10px 25px; font-size: 15px; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 12px rgba(46, 213, 115, 0.3);">
-                        🔄 Выбрать другое блюдо
-                    </button>
-                </div>
-                <div class="recipe-card" style="animation: fadeIn 0.4s ease-out;">
-                    <span style="background-color: #ffaf40; color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 10px; text-transform: uppercase;">${randomRecipe.categoryName}</span>
+            // Словарь для красивого перевода тегов категорий в случайном блюде
+            const categoryTitles = {
+                'soups': '🍲 Супы',
+                'potatoes': '🥔 Картошка',
+                'pizzas': '🍕 Пицца',
+                'burgers': '🍔 Бургеры',
+                'desserts': '🍦 Десерты',
+                'drinks': '🍹 Напитки'
+            };
+            const prettyCategory = categoryTitles[randomRecipe.categoryName] || randomRecipe.categoryName;
+
+            // Находим блок приветствия (это самая первая карточка в контейнере)
+            const container = document.getElementById("recipes-container");
+            const welcomeCard = container.querySelector('.recipe-card');
+
+            if (welcomeCard) {
+                // Меняем содержимое приветственной карточки, выводя туда рецепт!
+                welcomeCard.style.borderLeftColor = "#ffaf40"; // Меняем полоску на оранжевую
+                welcomeCard.style.textAlign = "left"; // Выравниваем текст по левому краю
+                welcomeCard.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <span style="background-color: #ffaf40; color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 10px; text-transform: uppercase;">🎲 СЛУЧАЙНОЕ БЛЮДО: ${prettyCategory}</span>
+                    </div>
                     <h2 style="margin-top: 10px;">${randomRecipe.name}</h2>
                     <div class="ingredients"><strong>Что понадобится:</strong> ${randomRecipe.ingredients}</div>
                     <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${randomRecipe.steps}</div>
-                </div>
-            `;
+                    <br>
+                    <div style="text-align: center;">
+                        <button onclick="getRandomRecipe()" style="background-color: #2ed573; color: white; border: none; padding: 12px 30px; font-size: 16px; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 12px rgba(46, 213, 115, 0.3); transition: all 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                            🔄 Выбрать другое случайное блюдо
+                        </button>
+                    </div>
+                `;
+            }
         }
+
 
         async function showCategory(category, buttonElement) {
             const headerBlock = document.querySelector('.fixed-top');
