@@ -275,12 +275,13 @@
 
         // Функция для отображения Главной страницы сайта
                 // Функция для отображения Главной страницы с бесконечной лентой всех рецептов
-        async function showHome(buttonElement) {
+               async function showHome(buttonElement) {
             const headerBlock = document.querySelector('.fixed-top');
-            headerBlock.style.position = "fixed";
+            headerBlock.style.position = "absolute"; /* Меняем fixed на absolute, чтобы шапка каталась! */
 
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             if(buttonElement) buttonElement.classList.add('active');
+
 
             const container = document.getElementById("recipes-container");
             
