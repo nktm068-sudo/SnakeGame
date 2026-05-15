@@ -323,9 +323,9 @@
                 'pizzas': '🍕 Пицца',
                 'burgers': '🍔 Бургеры',
                 'desserts': '🍦 Десерты',
-                'drinks': '🍹 Напитки'
-                'salats': '🥗 Салаты'
-                'sushi': '🍣 Суши'
+                'drinks': '🍹 Напитки',
+                'salats': '🥗 Салаты',
+                'sushi': '🍣 Суши',
             };
 
             // 3. Перебираем все категории по очереди и добавляем их рецепты в ленту
@@ -355,7 +355,7 @@
         }
 
         // Алгоритм генерации абсолютно любого случайного рецепта из всех категорий
-               // Алгоритм генерации случайного рецепта БЕЗ удаления ленты
+        // Алгоритм генерации случайного рецепта БЕЗ удаления ленты
         async function getRandomRecipe() {
             const data = await loadData();
             if (!data) return;
@@ -380,8 +380,8 @@
                 'pizzas': '🍕 Пицца',
                 'burgers': '🍔 Бургеры',
                 'desserts': '🍦 Десерты',
-                'drinks': '🍹 Напитки'
-                'salats': '🥗 Салаты'
+                'drinks': '🍹 Напитки', // <-- Поставили запятую
+                'salats': '🥗 Салаты',  // <-- Поставили запятую
                 'sushi': '🍣 Суши'
             };
             const prettyCategory = categoryTitles[randomRecipe.categoryName] || randomRecipe.categoryName;
@@ -411,10 +411,10 @@
             }
         }
 
-
+        // Функция для отображения отдельных категорий при клике на кнопки
         async function showCategory(category, buttonElement) {
             const headerBlock = document.querySelector('.fixed-top');
-            headerBlock.style.position = "fixed";
+            headerBlock.style.position = "fixed"; // Оставляем fixed, чтобы меню кнопок не уезжало на вкладках
 
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             if(buttonElement) buttonElement.classList.add('active');
@@ -438,19 +438,10 @@
                 `;
                 container.appendChild(card);
             });
-        // Функция для отображения отдельных категорий при клике на кнопки
-        async function showCategory(category, buttonElement) {
-            const headerBlock = document.querySelector('.fixed-top');
-            headerBlock.style.position = "fixed"; // Оставляем fixed, чтобы меню кнопок не уезжало на вкладках
 
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            if(buttonElement) buttonElement.classList.add('active');
-
-            const container = document.getElementById("recipes-container");
-            container.innerHTML = "<h3>ИИ открывает нужную страницу...</h3>";
-
-            const data = await loadData();
-            if (!data) return;
+            const headerHeight = headerBlock.offsetHeight;
+            container.style.marginTop = (headerHeight + 20) + "px";
+        }
 
             container.innerHTML = "";
             const recipes = data[category] || [];
@@ -538,7 +529,7 @@
                 'burgers': '🍔 Бургеры',
                 'desserts': '🍦 Десерты',
                 'drinks': '🍹 Напитки',
-                'salads': '🥗 Салаты',
+                'salats': '🥗 Салаты',
                 'sushi': '🍣 Суши'
             };
 
