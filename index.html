@@ -5,23 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eda.vkusno — Кулинарная Энциклопедия ИИ</title>
     <link rel="icon" type="image/png" href="varenik (1).png">
-     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Шапка и навигация зафиксированы здесь -->
-        <!-- Общий фиксированный блок для всей шапки сайта -->
+    <!-- Общий фиксированный блок для всей шапки сайта -->
     <div class="fixed-top">
         <header>
             <h1>🍕 eda.vkusno</h1>
         </header>
 
         <!-- Поле умного поиска -->
-      <div style="margin-top: 15px; width: 90%; max-width: 500px; position: relative;">
-          <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Поиск...">
-          <button id="clear-search" onclick="clearSearchField()" style="display: none; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 20px; font-weight: bold; color: var(--color-text-main); cursor: pointer; padding: 0; line-height: 1;">✕</button>
-      </div>
+        <div style="margin-top: 15px; width: 90%; max-width: 500px; position: relative;">
+            <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Поиск...">
+            <button id="clear-search" onclick="clearSearchField()" style="display: none; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 20px; font-weight: bold; color: var(--color-text-main); cursor: pointer; padding: 0; line-height: 1;">✕</button>
+        </div>
 
+        <!-- Навигация по категориям -->
         <div id="navigation">
             <button class="nav-btn active" onclick="showHome(this)">🏠 Главная</button>
             <button class="nav-btn" onclick="showCategory('soups', this)">🍲 Супы</button>
@@ -30,14 +30,15 @@
             <button class="nav-btn" onclick="showCategory('burgers', this)">🍔 Бургеры</button>
             <button class="nav-btn" onclick="showCategory('desserts', this)">🍦 Десерты</button>
             <button class="nav-btn" onclick="showCategory('drinks', this)">🍹 Напитки</button>
-            <button class="nav-btn" onclic="showCategory('salats', this)">🥗 Салаты</button>
-            <button class="nav-btn" onclic="showCategory('sushi', this)">🍣 Суши</button>   
+            <button class="nav-btn" onclick="showCategory('salats', this)">🥗 Салаты</button> <!-- Исправили onclick и salats -->
+            <button class="nav-btn" onclick="showCategory('sushi', this)">🍣 Суши</button>   <!-- Исправили onclick -->
         </div>
     </div>
 
-
+    <!-- Контейнер для рецептов -->
     <div id="recipes-container"></div>
 
-   <script src="script.js"></script>
+    <!-- Подключение скрипта логики -->
+    <script src="script.js"></script>
 </body>
 </html>
