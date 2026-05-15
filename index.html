@@ -251,6 +251,8 @@
             <button class="nav-btn" onclick="showCategory('burgers', this)">🍔 Бургеры</button>
             <button class="nav-btn" onclick="showCategory('desserts', this)">🍦 Десерты</button>
             <button class="nav-btn" onclick="showCategory('drinks', this)">🍹 Напитки</button>
+            <button class="nav-btn" onclic="showCategory('salats', this)">🥗 Салаты</button>
+            <button class="nav-btn" onclic="showCategory('sushi', this)">🍣 Суши</button>   
         </div>
     </div>
 
@@ -322,10 +324,12 @@
                 'burgers': '🍔 Бургеры',
                 'desserts': '🍦 Десерты',
                 'drinks': '🍹 Напитки'
+                'salats': '🥗 Салаты'
+                'sushi': '🍣 Суши'
             };
 
             // 3. Перебираем все категории по очереди и добавляем их рецепты в ленту
-            const categoriesOrder = ['soups', 'potatoes', 'pizzas', 'burgers', 'desserts', 'drinks'];
+            const categoriesOrder = ['soups', 'potatoes', 'pizzas', 'burgers', 'desserts', 'drinks', 'salats', 'sushi'];
             
             categoriesOrder.forEach(catKey => {
                 if (data[catKey] && data[catKey].length > 0) {
@@ -377,6 +381,8 @@
                 'burgers': '🍔 Бургеры',
                 'desserts': '🍦 Десерты',
                 'drinks': '🍹 Напитки'
+                'salats': '🥗 Салаты'
+                'sushi': '🍣 Суши'
             };
             const prettyCategory = categoryTitles[randomRecipe.categoryName] || randomRecipe.categoryName;
 
@@ -432,43 +438,39 @@
                 `;
                 container.appendChild(card);
             });
-
-            const headerHeight = headerBlock.offsetHeight;
-            container.style.marginTop = (headerHeight + 20) + "px";
-        }
-
-        function showThanks(buttonElement) {
+        // Функция для отображения отдельных категорий при клике на кнопки
+        async function showCategory(category, buttonElement) {
             const headerBlock = document.querySelector('.fixed-top');
-            headerBlock.style.position = "absolute";
+            headerBlock.style.position = "fixed"; // Оставляем fixed, чтобы меню кнопок не уезжало на вкладках
 
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             if(buttonElement) buttonElement.classList.add('active');
 
             const container = document.getElementById("recipes-container");
-            container.innerHTML = `
-                <div class="recipe-card" style="border-left-color: #ffca28; animation: fadeIn 0.4s ease-out;">
-                    <h2 style="color: #ffca28;">Project history and thanks to Google 🚀</h2>
-                    <div class="steps">
-                        Hello! My name is <strong>Nikita, I'm 8 years old</strong>. 
-                        I came up with and created this website, <strong>eda.vkusno</strong>, myself, while it was snowing outside in May.
-                        <br><br>
-                        I want to say a huge thank you to <strong>Google for the creation of the artificial intelligence Gemini</strong>! 
-                        Together with the Gemini neural network, we wrote this entire code from scratch, fixed a bunch of bugs, set up a smart search with typo protection, and launched the website online on GitHub Pages. 
-                        <br><br>
-                        Creating programs with AI is a joy. Thanks for this awesome lifesaver! 
-                    </div>
-                </div>
-            `;
+            container.innerHTML = "<h3>ИИ открывает нужную страницу...</h3>";
+
+            const data = await loadData();
+            if (!data) return;
+
+            container.innerHTML = "";
+            const recipes = data[category] || [];
+            
+            recipes.forEach(recipe => {
+                const card = document.createElement("div");
+                card.className = "recipe-card";
+                card.innerHTML = `
+                    <h2>${recipe.name}</h2>
+                    <div class="ingredients"><strong>Что понадобится:</strong> ${recipe.ingredients}</div>
+                    <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${recipe.steps}</div>
+                `;
+                container.appendChild(card);
+            });
 
             const headerHeight = headerBlock.offsetHeight;
             container.style.marginTop = (headerHeight + 20) + "px";
         }
 
-        window.onload = () => {
-            const firstBtn = document.querySelector('.nav-btn');
-            showHome(firstBtn);
-        };
-
+        // МАТЕМАТИЧЕСКИЙ АЛГОРИТМ ЛЕВЕНШТЕЙНА ДЛЯ ПРОВЕРКИ ОПЕЧАТОК
         function levDistance(s1, s2) {
             s1 = s1.toLowerCase(); s2 = s2.toLowerCase();
             let costs = new Array();
@@ -503,15 +505,20 @@
             return false;
         }
 
+        // УМНЫЙ ПОИСК ПО ВСЕМ КАТЕГОРИЯМ (ВКЛЮЧАЯ САЛАТЫ И СУШИ)
         async function handleSearch(query) {
-                const clearBtn = document.getElementById("clear-search");
-    if (clearBtn) clearBtn.style.display = query.trim() ? "block" : "none";
+            const clearBtn = document.getElementById("clear-search");
+            if (clearBtn) clearBtn.style.display = query.trim() ? "block" : "none";
             const container = document.getElementById("recipes-container");
+            
             if (!query.trim()) {
                 const activeBtn = document.querySelector('.nav-btn.active');
-                const categories = ['soups', 'potatoes', 'pizzas', 'burgers', 'desserts', 'drinks'];
-                const index = Array.from(document.querySelectorAll('.nav-btn')).indexOf(activeBtn);
-                showCategory(categories[index], activeBtn);
+                if (activeBtn) {
+                    activeBtn.click();
+                } else {
+                    const firstBtn = document.querySelector('.nav-btn');
+                    if (firstBtn) firstBtn.click();
+                }
                 return;
             }
 
@@ -524,6 +531,17 @@
             const queryWords = query.trim().split(/\s+/);
             let foundAny = false;
 
+            const categoryTitles = {
+                'soups': '🍲 Супы',
+                'potatoes': '🥔 Картошка',
+                'pizzas': '🍕 Пицца',
+                'burgers': '🍔 Бургеры',
+                'desserts': '🍦 Десерты',
+                'drinks': '🍹 Напитки',
+                'salads': '🥗 Салаты',
+                'sushi': '🍣 Суши'
+            };
+
             for (let category in data) {
                 data[category].forEach(recipe => {
                     let matchAllWords = queryWords.every(qWord => 
@@ -534,8 +552,9 @@
                         foundAny = true;
                         const card = document.createElement("div");
                         card.className = "recipe-card";
+                        const prettyCat = categoryTitles[category] || category;
                         card.innerHTML = `
-                            <span style="background-color: var(--color-primary); color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 10px; text-transform: uppercase;">${category}</span>
+                            <span style="background-color: var(--color-primary); color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 10px; text-transform: uppercase;">${prettyCat}</span>
                             <h2 style="margin-top: 10px;">${recipe.name}</h2>
                             <div class="ingredients"><strong>Что понадобится:</strong> ${recipe.ingredients}</div>
                             <div class="steps"><strong>Пошаговое руководство от ИИ:</strong><br>${recipe.steps}</div>
@@ -549,23 +568,30 @@
                 container.innerHTML = "<h3 style='text-align: center; color: var(--color-text-muted);'>ИИ ничего не нашёл. Попробуйте изменить запрос.</h3>";
             }
         }
-function clearSearchField() {
-    const input = document.getElementById("search-input");
-    const clearBtn = document.getElementById("clear-search");
-    
-    if (input) input.value = "";
-    if (clearBtn) clearBtn.style.display = "none";
-    
-    const activeBtn = document.querySelector('.nav-btn.active');
-    
-    if (activeBtn) {
-        activeBtn.click();
-    } else {
-        const firstBtn = document.querySelector('.nav-btn');
-        if (firstBtn) firstBtn.click();
-    }
-}
 
+        // ФУНКЦИЯ ОЧИСТКИ ПОЛЯ ПОИСКА И КНОПКА КРЕСТИКА
+        function clearSearchField() {
+            const input = document.getElementById("search-input");
+            const clearBtn = document.getElementById("clear-search");
+            
+            if (input) input.value = "";
+            if (clearBtn) clearBtn.style.display = "none";
+            
+            const activeBtn = document.querySelector('.nav-btn.active');
+            
+            if (activeBtn) {
+                activeBtn.click();
+            } else {
+                const firstBtn = document.querySelector('.nav-btn');
+                if (firstBtn) firstBtn.click();
+            }
+        }
+
+        // СТАРТ САЙТА ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+        window.onload = () => {
+            const firstBtn = document.querySelector('.nav-btn');
+            showHome(firstBtn);
+        };
     </script>
 </body>
 </html>
